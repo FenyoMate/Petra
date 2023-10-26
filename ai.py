@@ -1,7 +1,7 @@
 import os
 import openai
 
-openai.api_key = "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"
+openai.api_key_path = os.getenv("OPENAI_API_KEY_PATH")
 
 
 def process(msg):
