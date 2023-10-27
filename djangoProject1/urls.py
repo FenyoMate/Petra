@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 
 import PetraBot
+from accounts import views as accounts_views
 from PetraBot import views
 
 urlpatterns = [
@@ -26,4 +27,6 @@ urlpatterns = [
     re_path(r'^chat/$', views.chat, name='chat'),
     re_path(r'^user/$', views.user, name='user'),
     re_path(r'^profile/$', views.profile, name='profile'),
+    path('', views.chat, name='chat'),
+    re_path(r'^signup/$', accounts_views.signup, name='signup')
 ]

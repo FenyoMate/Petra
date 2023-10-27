@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u+#ky!j@+fz#6^as0g-55oz(dsc#x@5jjw&f7wx#oud-q9dnf*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['petrabot.io', 'www.petrabot.io']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'PetraBot',
-    "ratelimit",
+    'ratelimit',
+    'accounts',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

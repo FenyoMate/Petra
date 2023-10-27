@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 # The message model contains a message ID, the message itself, and the sender ID.
 class Message(models.Model):
-   #  sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    #  sender = models.ForeignKey(User, on_delete=models.CASCADE)
     answer = models.CharField(max_length=100000)
     message = models.CharField(max_length=100000)
     timestamp = models.DateTimeField(auto_now_add=True)
