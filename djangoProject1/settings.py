@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-u+#ky!j@+fz#6^as0g-55oz(dsc#x@5jjw&f7wx#oud-q9dnf*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['18.153.173.243', 'localhost']
 LOGOUT_REDIRECT_URL = 'chat'
 LOGIN_REDIRECT_URL = 'chat'
 
