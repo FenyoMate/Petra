@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 class Message(models.Model):
-   #  sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    #  sender = models.ForeignKey(User, on_delete=models.CASCADE)
     answer = models.CharField(max_length=100000)
     message = models.CharField(max_length=100000)
     timestamp = models.DateTimeField(auto_now_add=True)
