@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'petra',
         'USER': 'admin',
         'PASSWORD': 'admin',
-        'HOST': 
+        'HOST': '',
     }
 }
 
