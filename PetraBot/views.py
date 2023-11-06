@@ -26,3 +26,7 @@ def chat(request):
 
 def profile(request):
     return render(request, 'profile.html')
+
+
+def uc(request):
+    return render(request, 'underconstr.html')

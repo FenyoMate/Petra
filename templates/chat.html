@@ -6,12 +6,8 @@
     <div class="container">
             <div class="row">
                 <div class="col-md-9">
-                    <!--
-                     Active chat with an input box. The output is displayed in the same page above from the input box.
-                     The input will be sent to the Django server, which will process it. The answer will be sent
-                     to the output section, as an answer to the input.
-                     -->
                     <h5>Active chat</h5>
+                    {% if user.is_authenticated %}
                     <div id="active_chat" >
                         <div id="output">
                             {% for message in msg %}
@@ -34,6 +30,9 @@
                                     </div>
                                 </div>
                             {% endfor %}
+
+
+
                         </div>
                     </div>
                 </div>
@@ -41,10 +40,7 @@
     </div>
     <div class="container">
         <div id="input" class="h-50">
-            <!--
-            This should be the chat input. The input should be sent to the Django server, which will process it for the chat.
-            The button must be anchored to the right side of the input box.
-            -->
+
             <form method="post" id="chat_form">
                 {% csrf_token %}
                 <div class="row">
@@ -57,5 +53,7 @@
                 </div>
             </form>
         </div>
+        {% else %}
+        {% endif %}
     </div>
  {% endblock %}

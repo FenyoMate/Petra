@@ -15,5 +15,6 @@ def process(msg):
         max_tokens=30,
         temperature=0.7
     )
-    print(response.choices[0].message)
+   # print("Felhasznált tokenek:" + response.usage.total_tokens)
+    print(response)
     return response.choices[0].message.content

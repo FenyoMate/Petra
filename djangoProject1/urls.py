@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-
+from django.contrib.auth import views as auth_views
 import PetraBot
 from PetraBot import views
+from accounts import views as account_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +28,8 @@ urlpatterns = [
     re_path(r'^chat/$', views.chat, name='chat'),
     re_path(r'^user/$', views.user, name='user'),
     re_path(r'^profile/$', views.profile, name='profile'),
+    re_path(r'^signup/$', account_views.signup, name='signup'),
+    re_path(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
+    re_path(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    re_path(r'^uc/$', views.uc, name='underconstr')
 ]
