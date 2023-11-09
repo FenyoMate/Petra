@@ -26,10 +26,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^chat/(?P<pk>\d+)/$', views.chat, name='chat'),
     re_path(r'^chat/$', views.chat, name='chat'),
-    re_path(r'^user/$', views.user, name='user'),
     re_path(r'^profile/$', views.profile, name='profile'),
     re_path(r'^signup/$', account_views.signup, name='signup'),
     re_path(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
-    re_path(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    re_path(r'^$', account_views.login, name='login'),
     re_path(r'^uc/$', views.uc, name='underconstr')
 ]

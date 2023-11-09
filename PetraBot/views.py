@@ -9,19 +9,21 @@ from .models import Message
 import os
 
 
-def user(request):
-    return render(request, 'user.html')
+def profile(request):
+    return render(request, 'profile.html')
 
 
 def chat(request):
     messages = Message.objects.all()
+
     if request.method == 'POST':
         message = request.POST['chat_input']
 
         response = process(message)
 
         Message.objects.create(message=message, answer=response)
-        return render(request, 'chat.html', {'msg': messages})
+        return redirect(request, 'chat.html')
+    print(request.user.is_authenticated)
     return render(request, 'chat.html', {'msg': messages})
 
 

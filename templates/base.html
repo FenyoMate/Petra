@@ -38,10 +38,12 @@
                             </li>
                           </ul>
                     {% else %}
-                        <form class="form-inline ml-auto">
-                            <a href="{% url 'login' %}" class="btn btn-light">Log in</a>
-                            <a href="{% url 'signup' %}" class="btn btn-info ml-2">Sign up</a>
-                        </form>
+                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                            <form class="form-inline ml-auto">
+                                <a href="{% url 'login' %}" class="btn btn-light">Log in</a>
+                                <a href="{% url 'signup' %}" class="btn btn-info ml-2">Sign up</a>
+                            </form>
+                          <div class="dropdown-divider"></div>
                     {% endif %}
                 </div>
               </div>

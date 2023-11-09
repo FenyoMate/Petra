@@ -12,8 +12,8 @@ def process(msg):
              "content": "You are a hungarian woman asssistant. Your job to answer the prompt questions."}, #TODO A kontextust kiegészíteni a chat tartalmával
             {"role": "user", "content": msg}
         ],
-        max_tokens=100,
-        temperature=0.7
+        max_tokens=4000,
+        temperature=0.6
     )
    # print("Felhasznált tokenek:" + response.usage.total_tokens)
     print(response)

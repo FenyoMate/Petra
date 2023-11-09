@@ -2,12 +2,11 @@
 
 {% load static %}
 {% block content %}
-
+    {% if user.is_authenticated %}
     <div class="container">
             <div class="row">
                 <div class="col-md-9">
                     <h5>Active chat</h5>
-                    {% if user.is_authenticated %}
                     <div id="active_chat" >
                         <div id="output">
                             {% for message in msg %}
