@@ -1,7 +1,9 @@
 import os
 import openai
 
-openai.api_key = "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"
+from key import Key
+
+openai.api_key = Key
 
 
 def process(msg):
