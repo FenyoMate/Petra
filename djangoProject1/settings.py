@@ -26,9 +26,10 @@ SECRET_KEY = os.environ['OPENAI_API_KEY']
 DEBUG = True
 
 ALLOWED_HOSTS = []
-LOGOUT_REDIRECT_URL = 'chat'
-LOGIN_REDIRECT_URL = 'chat'
 
+
+LOGOUT_REDIRECT_URL = 'login.html'
+LOGIN_REDIRECT_URL = 'chat.html'
 # Application definition
 
 INSTALLED_APPS = [
