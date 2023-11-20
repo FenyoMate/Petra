@@ -6,25 +6,24 @@ from key import Key
 openai.api_key = Key
 
 
-def msgContext(messages):
+def msgContext(message):
     context = ""
-    for message in messages:
-        context += "[" + message.timestamp.strftime("%Y-%m-%d %H:%M") + "] " + " User:" + message.message + "\n"
-        context += "[" + message.timestamp.strftime("%Y-%m-%d %H:%M") + "] " + " Petra:" + message.answer + "\n"
-        print(context)
+    context += " User:" + str(message) + "\n"
+    print(context)
     return context
 
 
 def process(msg, context):
     print(context)
+    ct = "A következő kérdéseket tettem fel korábban és válaszoltál rájuk. Ez a te kontextusod: "+context
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4-1106-preview",
         messages=[
-            {"role": "system", "content": context},
+            {"role": "system", "content": ct},
             {"role": "user", "content": msg}
         ],
         max_tokens=4000,
-        temperature=0.6
+        temperature=0.4
     )
     # print("Felhasznált tokenek:" + response.usage.total_tokens)
     print(response)

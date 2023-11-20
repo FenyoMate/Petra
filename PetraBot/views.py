@@ -7,48 +7,46 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
 from ai import process, msgContext
 from .forms import newChatForm
-from .models import Chat, User
+from .models import Chat, User, ChatMessage
 import os
 
 
+@login_required
 def profile(request):
-    messages = Chat.objects.all()
-
-    return render(request, 'profile.html')
+    chats = Chat.objects.all()
+    if request.method == 'POST':
+        return redirect('chat', pk=request.POST['cid'])
+    return render(request, 'profile.html', {'chats': chats})
 
 
 @login_required
 def chat(request, pk):
-    chat = get_object_or_404(Chat, pk=pk)
+    tchat = get_object_or_404(Chat, pk=pk)
     if request.method == 'POST':
-        chat.message += (request.user + ";" +
-                         request.POST['chat_input'].timestamp.strftime("%Y-%m-%d %H:%M") + ";" +
-                         request.POST['chat_input'] + "\n")
-        response = process(request.POST['chat_input'], request.user.chat_set.get(pk).message)
-        message= {
-            'sender': request.user,
-            'timestamp': request.POST['chat_input'].timestamp.strftime("%Y-%m-%d %H:%M"),
-            'message': request.POST['chat_input'],
-            'answer': response
-        }
+        messages = ChatMessage.objects.filter(chat=tchat)
+        ct = ""
+        #Make messages into a string to pass to the AI
+        for message in messages:
+            ct += message.message + message.answer
+        response = process(request.POST['chat_input'], tchat.context+ct)
+        print(request.user)
+        ChatMessage.objects.create(
+            chat=tchat,
+            message=str(request.POST.get('chat_input', False)),
+            answer=str(response),
+            user=request.user
+        )
 
-        return render(request, 'chat.html', {'msg': message})
+        tchat.save()
+        return redirect( 'chat', tchat.pk)
     else:
         user = request.user
-        if user.is_authenticated:
-
-            print(chat.message)
-            msg ={
-                'sender': chat.message.split(';')[0],
-                'timestamp': chat.message.split(';')[1],
-                'message': chat.message.split(';')[2],
-                'answer': chat.message.split(';')[3]
-            }
-            return render(request, 'chat.html', {'msg': msg})
+        if ChatMessage.objects.filter(chat=tchat).exists():
+            messages = ChatMessage.objects.filter(chat=tchat)
+            return render(request, 'chat.html', {'messages': messages})
         else:
-            return render(request, 'login.html')
-
-
+            message = {}
+            return render(request, 'chat.html', message)
 
 
 @login_required
@@ -56,21 +54,14 @@ def new_chat(request):
     user = get_object_or_404(User, pk=request.user.pk)
     if request.method == 'POST':
         form = newChatForm(request.POST)
-        form.message = "System: You are a woman assistant called Petra. Your job is to help your chat partner in any case."
         form.user = user
-        print(form)
-        tchat = form.save(commit=False)
         if form.is_valid():
-            tchat.save()
-            Chat.objects.create(
-                message=tchat.message,
-                title=tchat.title,
-                user=tchat.user
-            )
+            tchat = form.save()
             return redirect('chat', pk=tchat.pk)
     else:
         form = newChatForm()
     return render(request, 'new_chat.html', {'form': form})
+
 
 def uc(request):
     return render(request, 'underconstr.html')

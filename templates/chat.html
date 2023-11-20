@@ -2,36 +2,32 @@
 
 {% load static %}
 {% block content %}
-    {% if user.is_authenticated %}
     <div class="container">
             <div class="row">
                 <div class="col-md-9">
                     <h5>Active chat</h5>
                     <div id="active_chat" >
                         <div id="output">
-                            {% for message in msg %}
+                            {% for message in messages %}
                                 <div class="message">
                                     <div class="row">
                                         <div class="col-sm-2">
-                                            <p>{{ message.sender }}</p>
-                                        </div>
-                                        <div class="col-sm-2">
-                                           <p>{{ message.timestamp }}</p>
+                                            {{ message.user }}  {{ message.time }} :
                                         </div>
                                         <div class="col-sm-8">
-                                            <p>{{ message.message }}</p>
+                                            {{ message.message }}
                                         </div>
                                     </div>
-                                    <div class="row justify-content-center">
-                                        <div class="col-sm-6 ">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            Petra:
+                                        </div>
+                                        <div class="col-sm-8">
                                             {{ message.answer }}
                                         </div>
                                     </div>
                                 </div>
                             {% endfor %}
-
-
-
                         </div>
                     </div>
                 </div>
@@ -52,7 +48,5 @@
                 </div>
             </form>
         </div>
-        {% else %}
-        {% endif %}
     </div>
  {% endblock %}

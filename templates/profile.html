@@ -6,26 +6,34 @@
         <div class="container">
             {% if user.is_authenticated %}
             <div class="row">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>New Chat</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="col-md-12">
-                            <a href="{% url 'new_chat' %}" class="btn btn-primary">New Chat</a>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>New Chat</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-md-12">
+                                <a href="{% url 'new_chat' %}" class="btn btn-primary">New Chat</a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 {% for user in chats %}
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-header">
-                            <h2>{{ title }}</h2>
+                            <h2>{{ user.title }}</h2>
                         </div>
                         <div class="card-body">
                             <div class="col-md-12">
-                                <a href="{% url 'chat' chat.pk %}" class="btn btn-primary">Open Chat</a>
+                                <p>{{ user.context }}</p>
+                            </div>
+                            <div class="col-md-12">
+                               <a id = 'cid' name = 'chat' href="{% url 'chat' user.pk %}" class="btn btn-primary">Open Chat</a>
                             </div>
                         </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         {% else %}

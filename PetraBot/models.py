@@ -5,22 +5,15 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Chat(models.Model):
-    message = models.CharField(max_length=900000)
     title = models.CharField(max_length=100)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    context = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(args, kwargs)
-        self.chat = None
-
-    def create(self, message, title, user):
-        self.message = message
-        self.title = title
-        self.user = user
-        self.save()
-        return self
-
-    def __str__(self):
-        return self.chat
+class ChatMessage(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE, default=None)
+    message = models.CharField(max_length=90000)
+    answer = models.CharField(max_length=90000)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    time = models.DateTimeField(auto_now_add=True)
 
 
