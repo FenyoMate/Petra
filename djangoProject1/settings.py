@@ -24,7 +24,7 @@ from key import Key
 SECRET_KEY = Key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['18.153.173.243', 'localhost']  #
 LOGOUT_REDIRECT_URL = 'chat'
