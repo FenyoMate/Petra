@@ -55,8 +55,10 @@ def new_chat(request):
         form = newChatForm(request.POST)
         form.user = user
         if form.is_valid():
-            tchat = form.save()
-            return redirect('chat', pk=tchat.pk)
+            user = form.save(commit=False)
+            user.user = request.user
+            user.save()
+            return redirect('chat', pk=user.pk)
     else:
         form = newChatForm()
     return render(request, 'new_chat.html', {'form': form})
