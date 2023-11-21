@@ -6,17 +6,19 @@ from key import Key
 openai.api_key = Key
 
 
-def process(msg):
+
+def process(msg, context):
+    print(context)
+    ct = "A következő kérdéseket tettem fel korábban és válaszoltál rájuk. Ez a te kontextusod: " + context
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4-1106-preview",
         messages=[
-            {"role": "system",
-             "content": "You are a hungarian woman asssistant. Your job to answer the prompt questions."}, #TODO A kontextust kiegészíteni a chat tartalmával
+            {"role": "system", "content": ct},
             {"role": "user", "content": msg}
         ],
-        max_tokens=2000,
-        temperature=0.6
+        max_tokens=4000,
+        temperature=0.4
     )
-   # print("Felhasznált tokenek:" + response.usage.total_tokens)
+    # print("Felhasznált tokenek:" + response.usage.total_tokens)
     print(response)
     return response.choices[0].message.content

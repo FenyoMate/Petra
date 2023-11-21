@@ -26,10 +26,13 @@ SECRET_KEY = Key
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['18.153.173.243', 'localhost']  # 
+ALLOWED_HOSTS = ['18.153.173.243', 'localhost']  #
 LOGOUT_REDIRECT_URL = 'chat'
 LOGIN_REDIRECT_URL = 'chat'
 
+
+LOGOUT_REDIRECT_URL = 'login.html'
+LOGIN_REDIRECT_URL = 'chat.html'
 # Application definition
 
 INSTALLED_APPS = [
