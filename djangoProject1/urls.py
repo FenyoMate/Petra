@@ -30,5 +30,6 @@ urlpatterns = [
     re_path(r'^signup/$', account_views.signup, name='signup'),
     re_path(r'^logout/$', account_views.logout, name='logout'),
     re_path(r'^$', account_views.login, name='login'),
+    re_path(r'^accounts/login/$', account_views.login, name='login'),
     re_path(r'^uc/$', views.uc, name='underconstr')
 ]

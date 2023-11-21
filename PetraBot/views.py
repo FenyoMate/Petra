@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
-from ai import process, msgContext
+from ai import process
 from .forms import newChatForm
 from .models import Chat, User, ChatMessage
 import os
@@ -25,7 +25,6 @@ def chat(request, pk):
     if request.method == 'POST':
         messages = ChatMessage.objects.filter(chat=tchat)
         ct = ""
-        #Make messages into a string to pass to the AI
         for message in messages:
             ct += message.message + message.answer
         response = process(request.POST['chat_input'], tchat.context+ct)

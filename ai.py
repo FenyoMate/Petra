@@ -6,16 +6,9 @@ from key import Key
 openai.api_key = Key
 
 
-def msgContext(message):
-    context = ""
-    context += " User:" + str(message) + "\n"
-    print(context)
-    return context
-
-
 def process(msg, context):
     print(context)
-    ct = "A következő kérdéseket tettem fel korábban és válaszoltál rájuk. Ez a te kontextusod: "+context
+    ct = "A következő kérdéseket tettem fel korábban és válaszoltál rájuk. Ez a te kontextusod: " + context
     response = openai.ChatCompletion.create(
         model="gpt-4-1106-preview",
         messages=[
