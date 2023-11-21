@@ -13,7 +13,7 @@ import os
 
 @login_required
 def profile(request):
-    chats = Chat.objects.all()
+    chats = Chat.objects.filter(user=request.user)
     if request.method == 'POST':
         return redirect('chat', pk=request.POST['cid'])
     return render(request, 'profile.html', {'chats': chats})
