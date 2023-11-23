@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -17,7 +18,7 @@ def login(request):
             print("valid")
             user = form.get_user()
             auth_login(request, user)
-            return render(request, 'chat.html', {'user': user})
+            return render(request, 'profile.html')
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
@@ -34,7 +35,7 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
-
+@login_required
 def logout(request):
     user = request.user
     if user.is_authenticated:

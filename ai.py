@@ -6,6 +6,7 @@ from key import Key
 openai.api_key = Key
 
 
+
 def process(msg, context):
     print(context)
     ct = "A következő kérdéseket tettem fel korábban és válaszoltál rájuk. Ez a te kontextusod: " + context
