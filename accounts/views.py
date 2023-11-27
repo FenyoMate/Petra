@@ -81,14 +81,14 @@ def settings(request):
 
 
 def context(request):
-    context = get_object_or_404(superContext, pk=1)
+    contxt = get_object_or_404(superContext, pk=1)
     if request.method == 'POST':
         form = UploadContextForm(request.POST, request.FILES or None)
-        context.context = request.POST['cont']
-        context.save()
+        contxt.context = request.POST['cont']
+        contxt.save()
         return redirect('context')
     form = UploadContextForm()
-    return render(request, 'context.html', {'form': form, 'context': context.context})
+    return render(request, 'context.html', {'form': form, 'context': contxt.context})
 
 
 def permissions(request):

@@ -8,7 +8,7 @@ from accounts.models import Worker, Role
 
 class SignUpForm(UserCreationForm):
     email = forms.CharField(max_length=254, required=True, widget=forms.EmailInput())
-    accept = forms.BooleanField(widget=CheckboxInput())
+ #   accept = forms.BooleanField()
 
     class Meta:
         model = User

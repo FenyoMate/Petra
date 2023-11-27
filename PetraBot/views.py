@@ -36,7 +36,6 @@ def chat(request, pk):
         for message in messages:
             ct += message.message + "\n" + message.answer + "\n"
         response = process(request.POST['chat_input'], tchat.context + ct)
-        print(request.user)
         ChatMessage.objects.create(
             chat=tchat,
             message=str(request.POST.get('chat_input', False)),
