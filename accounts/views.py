@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.decorators.csrf import csrf_exempt
 from .models import Worker, superContext
-from .forms import SignUpForm, LoginForm, SetupForm
+from .forms import SignUpForm, LoginForm, SetupForm, UploadContextForm
 
 
 # Create your views here.
@@ -44,6 +44,7 @@ def logout(request):
         request.session.flush()
     return redirect('login')
 
+
 @login_required
 def profileSetup(request):
     user = get_object_or_404(User, pk=request.user.pk)
@@ -69,11 +70,26 @@ def profileSetup(request):
             user = form.save(commit=False)
             user.user = request.user
             user.save()
-            return redirect( 'profile')
+            return redirect('profile')
     else:
         form = SetupForm()
-    return render(request, 'profileSetup.html',{'form': form})
+    return render(request, 'profileSetup.html', {'form': form})
 
 
 def settings(request):
     return render(request, 'settings.html')
+
+
+def context(request):
+    context = get_object_or_404(superContext, pk=1)
+    if request.method == 'POST':
+        form = UploadContextForm(request.POST, request.FILES or None)
+        context.context = request.POST['cont']
+        context.save()
+        return redirect('context')
+    form = UploadContextForm()
+    return render(request, 'context.html', {'form': form, 'context': context.context})
+
+
+def permissions(request):
+    return render(request, 'permissions.html')

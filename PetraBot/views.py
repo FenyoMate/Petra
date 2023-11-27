@@ -43,7 +43,6 @@ def chat(request, pk):
             answer=str(response),
             user=request.user
         )
-
         tchat.save()
         return redirect('chat', tchat.pk)
     else:

@@ -2,7 +2,7 @@
 
 {% load static %}
 {% block content %}
-    <div class="container">
+    <div class="container" id="chat-container">
             <div class="row">
                 <div class="col-md-9">
                     <h5>Active chat</h5>
@@ -23,7 +23,7 @@
                                         <div class="col-sm-2">
                                             Petra:
                                         </div>
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-8" id="chat-answer">
                                             {{ message.answer }}
                                         </div>
                                     </div>
@@ -50,4 +50,20 @@
             </form>
         </div>
     </div>
+    <script>
+        function simulateTyping({{ message.answer }}) {
+            const typingIndicator = document.getElementById('chat-answer');
+            typingIndicator.innerHTML = '';
+
+            let index = 0;
+            const typingInterval = setInterval(() => {
+                typingIndicator.innerHTML += {{message.answer}}[index];
+                index++;
+
+                if (index === {{ message.answer.length }}) {
+                    clearInterval(typingInterval);
+                }
+            }, 50); // Adjust the interval as needed
+        }
+    </script>
  {% endblock %}

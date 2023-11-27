@@ -5,7 +5,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="container-md">
                     <div class="row">
                         <div class="col-md-12">
@@ -19,20 +19,30 @@
                     </div>
                     {% for roles in roles %}
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             {{ roles.name }}
                         </div>
-                        <div class="col-sm-4">
-                            {{ roles.title }}
+                        <div class="col-sm-3">
+                            {{ roles.title.name }}
                         </div>
                         <div class="col-sm-2">
                             {{ roles.desk }}
                         </div>
                     </div>
                     {% endfor %}
-                        <div class="col">
+                    <div class="row">
+                        <div class="col-sm-3">
                             <a href="{% url 'setup' %}" class="btn btn-primary">Change character data</a>
                         </div>
+                        {% if user.is_staff %}
+                        <div class="col-sm-3">
+                            <a href="{% url 'context' %}" class="btn">Kontextus beállítása</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="{% url 'permissions' %}" class="btn btn-secondary">Személyek, jogosultságok</a>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             <div class="col-md-8">

@@ -1,16 +1,18 @@
 import os
 import openai
+from django.shortcuts import get_object_or_404
+
 from accounts.models import superContext
 
 from key import Key
 
 openai.api_key = Key
 
-superContext = ""
 
 def process(msg, context):
     print(context)
-    ct = "A következő az előre megadott kontextusod: " + superContext.context + "\n"
+    sc = get_object_or_404(superContext, id=1)
+    ct = "A következő az előre megadott kontextusod: " + sc.context + "\n"
     ct += "A következő kérdéseket tettem fel korábban és válaszoltál rájuk. Ez a te kontextusod: \n" + context
     response = openai.ChatCompletion.create(
         model="gpt-4-1106-preview",

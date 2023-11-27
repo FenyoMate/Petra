@@ -39,12 +39,6 @@
                             <li class="nav-item">
                               <a class="nav-link" href="{% url 'profile' %}">{{ user.username }}</a>
                             </li>
-                            {% if user.is_staff %}
-                              <li class="nav-item">
-                                <a class="nav-link" href="{% url 'settings' %}">Global settings</a>
-                              </li>
-                            {% else %}
-                            {% endif %}
                             <li class="nav-item">
                               <a class="nav-link active" href="{% url 'logout' %}" >Logout</a>
                             </li>

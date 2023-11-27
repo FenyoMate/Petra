@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="container-md">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p>Kontextus hozzáadása</p>
+                            <form method="POST" novalidate>
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                               <!-- <div class="input-group">
+                                    <input type="file" class="form-control" id="context" aria-label="Upload">
+                                </div>
+                                <br>
+                                <div class="input-group">
+                                    <textarea class="form-control" id="addedContext" rows="5"></textarea>
+                                </div>
+                                <br>-->
+                                <button type="submit" class="btn btn-primary">Kontextus hozzáadása</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="container-md">
+                    <div class="row">
+                        <p>Eddig előre megadott kontextus:</p>
+                    </div>
+                    <br>
+                    <div class="row">
+                        {{ context }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+```
