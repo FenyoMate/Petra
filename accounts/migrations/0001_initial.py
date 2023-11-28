@@ -15,22 +15,28 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Chat',
+            name='Role',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('context', models.CharField(max_length=100)),
-                ('user', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('name', models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
-            name='ChatMessage',
+            name='superContext',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('message', models.CharField(max_length=90000)),
-                ('answer', models.CharField(max_length=90000)),
-                ('time', models.DateTimeField(auto_now_add=True)),
-                ('chat', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='PetraBot.chat')),
+                ('context', models.CharField(max_length=90000)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Worker',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('desk', models.CharField(max_length=20)),
+                ('name', models.CharField(max_length=100)),
+                ('firstname', models.CharField(max_length=100)),
+                ('lastname', models.CharField(max_length=100)),
+                ('title', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='accounts.role')),
                 ('user', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

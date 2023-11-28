@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
+
+from accounts.models import Worker
 from ai import process
 from .forms import newChatForm
 from .models import Chat, User, ChatMessage
@@ -14,9 +16,15 @@ import os
 @login_required
 def profile(request):
     chats = Chat.objects.filter(user=request.user)
+    roles = Worker.objects.filter(user=request.user)
+    context = {
+        'roles': roles,
+        'chats': chats
+
+    }
     if request.method == 'POST':
         return redirect('chat', pk=request.POST['cid'])
-    return render(request, 'profile.html', {'chats': chats})
+    return render(request, 'profile.html', context)
 
 
 @login_required
@@ -26,18 +34,16 @@ def chat(request, pk):
         messages = ChatMessage.objects.filter(chat=tchat)
         ct = ""
         for message in messages:
-            ct += message.message + message.answer
-        response = process(request.POST['chat_input'], tchat.context+ct)
-        print(request.user)
+            ct += message.message + "\n" + message.answer + "\n"
+        response = process(request.POST['chat_input'], tchat.context + ct)
         ChatMessage.objects.create(
             chat=tchat,
             message=str(request.POST.get('chat_input', False)),
             answer=str(response),
             user=request.user
         )
-
         tchat.save()
-        return redirect( 'chat', tchat.pk)
+        return redirect('chat', tchat.pk)
     else:
         user = request.user
         if ChatMessage.objects.filter(chat=tchat).exists():

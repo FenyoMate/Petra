@@ -3,40 +3,83 @@
 {% load static %}
 {% block content %}
 
-        <div class="container">
-            {% if user.is_authenticated %}
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>New Chat</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="col-md-12">
-                                <a href="{% url 'new_chat' %}" class="btn btn-primary">New Chat</a>
-                            </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="container-md">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Profile</h2>
                         </div>
                     </div>
-                </div>
-                {% for user in chats %}
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2>{{ user.title }}</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="col-md-12">
-                                <p>{{ user.context }}</p>
-                            </div>
-                            <div class="col-md-12">
-                               <a id = 'cid' name = 'chat' href="{% url 'chat' user.pk %}" class="btn btn-primary">Open Chat</a>
-                            </div>
+                    <div class="row">
+                        <div class="col">
+                            <img src="{% static 'images/profile.png' %}" alt="{{ user.username }}" class="img-fluid">
                         </div>
                     </div>
+                    {% for roles in roles %}
+                    <div class="row">
+                        <div class="col-sm-4">
+                            {{ roles.name }}
+                        </div>
+                        <div class="col-sm-3">
+                            {{ roles.title.name }}
+                        </div>
+                        <div class="col-sm-2">
+                            {{ roles.desk }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <a href="{% url 'setup' %}" class="btn btn-primary">Change character data</a>
+                        </div>
+                        {% if user.is_staff %}
+                        <div class="col-sm-3">
+                            <a href="{% url 'context' %}" class="btn">Kontextus beállítása</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="{% url 'permissions' %}" class="btn btn-secondary">Személyek, jogosultságok</a>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-                {% endfor %}
             </div>
-        {% else %}
-            <h5>You are not logged in</h5>
-        {% endif %}
+            <div class="col-md-8">
+                <div class="container-md">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2>New Chat</h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-md-12">
+                                        <a href="{% url 'new_chat' %}" class="btn btn-primary">New Chat</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% for user in chats %}
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2>{{ user.title }}</h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-md-12">
+                                        <p>{{ user.context }}</p>
+                                    </div>
+                                    <div class="col-md-12">
+                                       <a id = 'cid' name = 'chat' href="{% url 'chat' user.pk %}" class="btn btn-primary">Open Chat</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
      {% endblock %}

@@ -2,13 +2,20 @@
 
 {% load static %}
 {% block content %}
-    <div class="container">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css" integrity="sha384-1EPRWM6fL8p/zyC51i7+uvFqEcKXTCcF5QgsJSwC7pS3UEk8/5A6FQozOBXHEbtX" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js" integrity="sha384-1nEPRWM6fL8p/zyC51i7+uvFqEcKXTCcF5QgsJSwC7pS3UEk8/5A6FQozOBXHEbtX" crossorigin="anonymous"></script>
+
+    <div class="container" id="chat-container">
             <div class="row">
                 <div class="col-md-9">
                     <h5>Active chat</h5>
                     <div id="active_chat" >
                         <div id="output">
                             {% for message in messages %}
+                               {% if user is message.user or user.is_staff %}
                                 <div class="message">
                                     <div class="row">
                                         <div class="col-sm-2">
@@ -17,16 +24,20 @@
                                         <div class="col-sm-8">
                                             {{ message.message }}
                                         </div>
+                                        <br>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-2">
                                             Petra:
                                         </div>
-                                        <div class="col-sm-8">
-                                            {{ message.answer }}
+                                        <div class="col-sm-8" id="chat-answer">
+                                            <div id="editor">{{ message.answer }}</div>
                                         </div>
                                     </div>
                                 </div>
+                                {% else %}
+                                    <p>Nincs jogosultságod a chat megtekintésére.</p>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
@@ -49,4 +60,21 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function simulateTyping({{ message.answer }}) {
+            const typingIndicator = document.getElementById('chat-answer');
+            typingIndicator.innerHTML = '';
+
+            let index = 0;
+            const typingInterval = setInterval(() => {
+                typingIndicator.innerHTML += {{message.answer}}[index];
+                index++;
+
+                if (index === {{ message.answer.length }}) {
+                    clearInterval(typingInterval);
+                }
+            }, 50); // Adjust the interval as needed
+        }
+    </script>
  {% endblock %}

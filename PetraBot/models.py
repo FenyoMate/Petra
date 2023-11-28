@@ -16,3 +16,6 @@ class ChatMessage(models.Model):
     answer = models.CharField(max_length=90000)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     time = models.DateTimeField(auto_now_add=True)
+
+
+
