@@ -15,7 +15,6 @@ def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(LoginForm, data=request.POST)
         if form.is_valid():
-            print("valid")
             user = form.get_user()
             auth_login(request, user)
             return redirect('profile')
