@@ -18,7 +18,7 @@ def login(request):
             print("valid")
             user = form.get_user()
             auth_login(request, user)
-            return render(request, 'profile.html')
+            return redirect('profile')
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
@@ -90,24 +90,3 @@ def context(request):
     form = UploadContextForm()
     return render(request, 'context.html', {'form': form, 'context': contxt.context})
 
-
-def permissions(request):
-    if request.method == 'POST':
-        form = PermissionForm(request.POST)
-        form2 = AddPositionForm(request.POST)
-        if form.is_valid():
-            users = form.cleaned_data['users']
-            permission = form.cleaned_data['permission']
-            for user in users:
-                user.is_superuser = permission
-                user.is_staff = permission
-                user.save()
-            return redirect('permissions')
-        if form2.is_valid():
-            position = form2.cleaned_data['position']
-            Role.objects.create(name=position)
-            return redirect('permissions')
-    else:
-        form = PermissionForm()
-        form2 = AddPositionForm()
-        return render(request, 'permissions.html', {'form': form, 'form2': form2})

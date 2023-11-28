@@ -6,7 +6,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
 
-from accounts.models import Worker
+from accounts.forms import PermissionForm, AddPositionForm
+from accounts.models import Worker, Role
 from ai import process
 from .forms import newChatForm
 from .models import Chat, User, ChatMessage
@@ -17,13 +18,31 @@ import os
 def profile(request):
     chats = Chat.objects.filter(user=request.user)
     roles = Worker.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        form = PermissionForm(request.POST)
+        form2 = AddPositionForm(request.POST)
+        if form.is_valid():
+            users = form.cleaned_data['users']
+            permission = form.cleaned_data['permission']
+            for user in users:
+                user.is_superuser = permission
+                user.is_staff = permission
+                user.save()
+            return redirect('permissions')
+        if form2.is_valid():
+            position = form2.cleaned_data['position']
+            Role.objects.create(name=position)
+        return redirect('chat', pk=request.POST['cid'])
+    else:
+        form = PermissionForm()
+        form2 = AddPositionForm()
     context = {
         'roles': roles,
-        'chats': chats
-
+        'chats': chats,
+        'form': form,
+        'form2': form2
     }
-    if request.method == 'POST':
-        return redirect('chat', pk=request.POST['cid'])
     return render(request, 'profile.html', context)
 
 
