@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.decorators.csrf import csrf_exempt
-from .models import Worker, superContext
-from .forms import SignUpForm, LoginForm, SetupForm, UploadContextForm
+from .models import Worker, superContext, Role
+from .forms import SignUpForm, LoginForm, SetupForm, UploadContextForm, PermissionForm, AddPositionForm
 
 
 # Create your views here.
@@ -92,4 +92,22 @@ def context(request):
 
 
 def permissions(request):
-    return render(request, 'permissions.html')
+    if request.method == 'POST':
+        form = PermissionForm(request.POST)
+        form2 = AddPositionForm(request.POST)
+        if form.is_valid():
+            users = form.cleaned_data['users']
+            permission = form.cleaned_data['permission']
+            for user in users:
+                user.is_superuser = permission
+                user.is_staff = permission
+                user.save()
+            return redirect('permissions')
+        if form2.is_valid():
+            position = form2.cleaned_data['position']
+            Role.objects.create(name=position)
+            return redirect('permissions')
+    else:
+        form = PermissionForm()
+        form2 = AddPositionForm()
+        return render(request, 'permissions.html', {'form': form, 'form2': form2})

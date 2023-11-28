@@ -8,11 +8,13 @@ from accounts.models import Worker, Role
 
 class SignUpForm(UserCreationForm):
     email = forms.CharField(max_length=254, required=True, widget=forms.EmailInput())
- #   accept = forms.BooleanField()
+
+  #  accept = forms.BooleanField(required=True, label="Elfogadom az adatvédelmi nyilatkozatot")
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
 
 class LoginForm(forms.ModelForm):
     class Meta:
@@ -36,3 +38,12 @@ class SetupForm(forms.ModelForm):
 class UploadContextForm(forms.Form):
     cont = forms.CharField(max_length=50000)
     file = forms.FileField()
+
+
+class PermissionForm(forms.Form):
+    users = forms.ModelMultipleChoiceField(queryset=User.objects.all(), label="")
+    permission = forms.BooleanField(required=False, widget=CheckboxInput, label="Adminisztrátor")
+
+
+class AddPositionForm(forms.Form):
+    position = forms.CharField(max_length=100, label="Pozíció neve")
