@@ -10,7 +10,7 @@ openai.api_key = Key
 
 
 def process(msg, context):
-    print(context)
+
     sc = get_object_or_404(superContext, id=1)
     ct = "A következő az előre megadott kontextusod: " + sc.context + "\n"
     ct += "A következő kérdéseket tettem fel korábban és válaszoltál rájuk. Ez a te kontextusod: \n" + context
@@ -23,6 +23,5 @@ def process(msg, context):
         max_tokens=4000,
         temperature=0.4
     )
-    # print("Felhasznált tokenek:" + response.usage.total_tokens)
-    print(response)
+
     return response.choices[0].message.content
