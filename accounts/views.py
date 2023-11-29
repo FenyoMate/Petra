@@ -1,3 +1,4 @@
+import markdown
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -32,6 +33,7 @@ def signup(request):
             return redirect('setup')
     else:
         form = SignUpForm()
+        form.accept = False
     return render(request, 'signup.html', {'form': form})
 
 
@@ -83,8 +85,13 @@ def context(request):
     contxt = get_object_or_404(superContext, pk=1)
     if request.method == 'POST':
         form = UploadContextForm(request.POST, request.FILES or None)
-        contxt.context = request.POST['cont']
+        contxt.context = str(request.POST.get('cont'))
+        contxt.context = markdown.markdown(str(contxt.context))
+        print(contxt.context)
         contxt.save()
+        if request.POST['img']:
+            contxt.img = request.POST['img']
+
         return redirect('context')
     form = UploadContextForm()
     return render(request, 'context.html', {'form': form, 'context': contxt.context})

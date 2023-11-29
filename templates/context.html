@@ -2,16 +2,35 @@
 
 {% load static %}
 {% block content %}
+
+    <style>
+    p{
+        font-size: 16px;
+        font-weight: bold;
+    }
+    label{
+        font-size: 12px;
+        font-weight: lighter;
+    }
+    </style>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
                 <div class="container-md">
                     <div class="row">
                         <div class="col-md-4">
-                            <p>Kontextus hozzáadása</p>
+                            <h2>Kontextus hozzáadása</h2>
                             <form method="POST" novalidate>
                                 {% csrf_token %}
-                                {{ form.as_p }}
+                                {{ form.cont.label_tag }}
+                                {{ form.cont|safe }}
+                                <br>
+                                {{ form.file.label_tag }}
+                                {{ form.file }}
+                                <br>
+                                {{ form.img.label_tag }}
+                                {{ form.img }}
+                                <br>
                                 <button type="submit" class="btn btn-primary">Kontextus hozzáadása</button>
                             </form>
                         </div>
@@ -21,11 +40,11 @@
             <div class="col-md-8">
                 <div class="container-md">
                     <div class="row">
-                        <p>Eddig előre megadott kontextus:</p>
+                        <h2>Eddig előre megadott kontextus:</h2>
                     </div>
                     <br>
                     <div class="row">
-                        {{ context }}
+                        {{ context| safe }}
                     </div>
                 </div>
             </div>

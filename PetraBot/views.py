@@ -1,3 +1,4 @@
+import markdown
 import openai
 import ratelimit
 from django.contrib.auth.decorators import login_required
@@ -29,11 +30,11 @@ def profile(request):
                 user.is_superuser = permission
                 user.is_staff = permission
                 user.save()
-            return redirect('permissions')
+            return redirect('profile')
         if form2.is_valid():
             position = form2.cleaned_data['position']
             Role.objects.create(name=position)
-        return redirect('chat', pk=request.POST['cid'])
+        return redirect('profile')
     else:
         form = PermissionForm()
         form2 = AddPositionForm()
@@ -55,10 +56,11 @@ def chat(request, pk):
         for message in messages:
             ct += message.message + "\n" + message.answer + "\n"
         response = process(request.POST['chat_input'], tchat.context + ct)
+        konvRes = markdown.markdown(response)
         ChatMessage.objects.create(
             chat=tchat,
             message=str(request.POST.get('chat_input', False)),
-            answer=str(response),
+            answer=konvRes,
             user=request.user
         )
         tchat.save()

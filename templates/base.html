@@ -13,18 +13,35 @@
                 overflow-y: scroll;
                 overflow-x: scroll;
             }
+            .btn{
+                background-color: #69bdd2;
+                border: none;
+                color: black;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                font-size: 12px;
+                margin: 1px 1px;
+                cursor: pointer;
+            }
+            a{
+                color: #69bdd2;
+            }
+            .btn:hover{
+                background-color: black;
+                color: white;
+            }
+
+
         </style>
         {% block stylesheet %}{% endblock %}
     </head>
     <body>
       {% block body %}
-         <nav class="navbar navbar-expand-md navbar-light bg-light d-none d-md-block">
+         <nav class="navbar navbar-expand-md navbar-dark bg-dark d-none d-md-block">
               <div class="container-fluid">
                 <a class="navbar-brand" >Petra</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="navbar" id="navbarSupportedContent">
                     {% if user.is_authenticated %}
                           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
@@ -39,17 +56,17 @@
                           </ul>
 
                     {% else %}
-                          <div class="dropdown-menu-right" aria-labelledby="userMenu">
-                                <a href="{% url 'login' %}" class="btn btn-light">Log in</a>
-                                <a href="{% url 'signup' %}" class="btn btn-info ml-2">Sign up</a>
+                          <div class="navbar-menu-right" aria-labelledby="userMenu">
+                                <a href="{% url 'login' %}" class="btn">Log in</a>
+                                <a href="{% url 'signup' %}" class="btn">Sign up</a>
                           <div class="dropdown-divider"></div>
                     {% endif %}
                 </div>
               </div>
          </nav>
-         <nav class="navbar navbar-light bg-light d-md-none">
+         <nav class="navbar navbar-dark bg-dark d-md-none">
             <div class="container">
-                <a class="navbar-brand" href="#">Mobil Menü</a>
+                <a class="navbar-brand">Mobil Menü</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNav" aria-controls="mobileNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>

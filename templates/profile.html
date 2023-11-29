@@ -2,7 +2,40 @@
 
 {% load static %}
 {% block content %}
+    <style>
+        select {
+            width: 100%;
+            padding: 5px 5px;
+            height: 20%;
+            color: black;
+            border: 1px solid #69bdd2;
+            border-radius: 5px;
+            text-align: center;
+            scrollbar-width: thin;
+            scrollbar-color: #f1f1f1 #e5e5e5;
+        }
 
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 6px;
+            border: 3px solid #f1f1f1;
+        }
+
+        p {
+            font-size: 14px;
+            color: #333842;
+            padding-bottom: 5%;
+        }
+
+    </style>
     <div class="container-fluid">
         <div class="row justify-content-start">
             <div class="col-5 justify-content-start">
@@ -23,23 +56,23 @@
                                 </div>-->
                                 {% for roles in roles %}
                                     <div class="row">
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-3">
                                             {{ roles.name }}
                                         </div>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-5">
                                             {{ roles.title.name }}
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-4">
                                             {{ roles.desk }}
                                         </div>
                                     </div>
                                 {% endfor %}
                                 <div class="row">
-                                    <div class="col-sm-3">
-                                        <a href="{% url 'setup' %}" class="btn btn-primary">Change character data</a>
+                                    <div class="col-md-6">
+                                        <a href="{% url 'setup' %}" class="btn">Change character data</a>
                                     </div>
                                     {% if user.is_staff %}
-                                        <div class="col-sm-3">
+                                        <div class="col-md-6">
                                             <a href="{% url 'context' %}" class="btn">Kontextus beállítása</a>
                                         </div>
                                         </div>
@@ -49,7 +82,7 @@
                                                 <form method="POST" novalidate>
                                                     {% csrf_token %}
                                                     {{ form.as_p }}
-                                                    <button type="submit" class="btn btn-primary">Profil módosítása
+                                                    <button type="submit" class="btn">Profil módosítása
                                                     </button>
                                                 </form>
                                             </div>
@@ -77,20 +110,20 @@
 
         <div class="col-7">
             <div class="row justify-content-start">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
                             <h2>New Chat</h2>
                         </div>
                         <div class="card-body">
                             <div class="col-md-12">
-                                <a href="{% url 'new_chat' %}" class="btn btn-primary">New Chat</a>
+                                <a href="{% url 'new_chat' %}" class="btn">New Chat</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 {% for user in chats %}
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h2>{{ user.title }}</h2>

@@ -2,47 +2,44 @@
 
 {% load static %}
 {% block content %}
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css" integrity="sha384-1EPRWM6fL8p/zyC51i7+uvFqEcKXTCcF5QgsJSwC7pS3UEk8/5A6FQozOBXHEbtX" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdn.quilljs.com/1.3.6/quill.js" integrity="sha384-1nEPRWM6fL8p/zyC51i7+uvFqEcKXTCcF5QgsJSwC7pS3UEk8/5A6FQozOBXHEbtX" crossorigin="anonymous"></script>
+    <!-- Latest compiled and minified CSS -->
 
     <div class="container" id="chat-container">
-            <div class="row">
-                <div class="col-md-9">
-                    <h5>Active chat</h5>
-                    <div id="active_chat" >
-                        <div id="output">
-                            {% for message in messages %}
-                               {% if user is message.user or user.is_staff %}
+        <div class="row">
+            <div class="col-md-9">
+                <h5>Active chat</h5>
+                <div id="active_chat">
+                    <div id="output">
+                        {% for message in messages %}
+                            {% if user is message.user or user.is_staff %}
                                 <div class="message">
                                     <div class="row">
-                                        <div class="col-sm-2">
-                                            {{ message.user }}  {{ message.time }} :
+                                        <div class="col">
+                                            <label class="label label-info" for="mess">
+                                                {{ message.user }}:
+                                            </label>
+
+                                            <p id="mess"> {{ message.message|safe }}</p>
+
                                         </div>
-                                        <div class="col-sm-8">
-                                            {{ message.message }}
-                                        </div>
-                                        <br>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-2">
+                                        <div class="col-2">
                                             Petra:
                                         </div>
-                                        <div class="col-sm-8" id="chat-answer">
-                                            <div id="editor">{{ message.answer }}</div>
+                                        <div class="col-10" id="chat-answer">
+                                            <div id="editor">{{ message.answer|safe }}</div>
                                         </div>
                                     </div>
                                 </div>
-                                {% else %}
-                                    <p>Nincs jogosultságod a chat megtekintésére.</p>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                            {% else %}
+                                <p>Nincs jogosultságod a chat megtekintésére.</p>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
+        </div>
     </div>
     <div class="container">
         <div id="input" class="h-50">
@@ -51,19 +48,20 @@
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-sm-10">
-                        <input type="text" id="msg" name="chat_input" class="form-control" placeholder="Type your message here...">
+                        <input type="text" id="msg" name="chat_input" class="form-control"
+                               placeholder="Type your message here...">
                     </div>
                     <div class="col-sm-2">
-                        <button type="submit" class="btn btn-success">Send</button>
+                        <button type="submit" class="btn btn-success" onclick="simulateTyping()">Send</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
-    <script>
+<script>
         function simulateTyping({{ message.answer }}) {
-            const typingIndicator = document.getElementById('chat-answer');
+            console.log({{ message.answer}});
+            const typingIndicator = document.getElementById('editor');
             typingIndicator.innerHTML = '';
 
             let index = 0;
@@ -71,10 +69,9 @@
                 typingIndicator.innerHTML += {{message.answer}}[index];
                 index++;
 
-                if (index === {{ message.answer.length }}) {
-                    clearInterval(typingInterval);
-                }
+
             }, 50); // Adjust the interval as needed
         }
     </script>
- {% endblock %}
+
+{% endblock %}
