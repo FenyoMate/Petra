@@ -85,9 +85,12 @@ def context(request):
     contxt = get_object_or_404(superContext, pk=1)
     if request.method == 'POST':
         form = UploadContextForm(request.POST, request.FILES or None)
-        contxt.context = str(request.POST.get('cont'))
-        contxt.context = markdown.markdown(str(contxt.context))
-        print(contxt.context)
+        tstr = request.POST.get('cont', '')
+        print(type(tstr))
+        tstr = tstr.replace('\r\n', '\n')
+        print(tstr)
+        contxt.context = tstr
+        contxt.context= markdown.markdown(contxt.context)
         contxt.save()
         if request.POST['img']:
             contxt.img = request.POST['img']
