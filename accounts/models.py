@@ -17,3 +17,15 @@ class Worker(models.Model):
 
 class superContext(models.Model):
     context = models.CharField(max_length=90000)
+
+
+class upContext(models.Model):
+    uploaded_files = models.FileField(upload_to='static/contexts/')
+
+    def delete(self, *args, **kwargs):
+        # Töröld a fájlt a szerverről
+        if self.uploaded_files:
+            storage, path = self.uploaded_files.storage, self.uploaded_files.path
+            storage.delete(path)
+
+        super().delete(*args, **kwargs)

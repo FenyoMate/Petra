@@ -4,14 +4,15 @@
 {% block content %}
 
     <style>
-    p{
-        font-size: 16px;
-        font-weight: bold;
-    }
-    label{
-        font-size: 12px;
-        font-weight: lighter;
-    }
+        p {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: lighter;
+        }
     </style>
     <div class="container">
         <div class="row">
@@ -20,16 +21,9 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h2>Kontextus hozzáadása</h2>
-                            <form method="POST" novalidate>
+                            <form enctype="multipart/form-data" method="POST">
                                 {% csrf_token %}
-                                {{ form.cont.label_tag }}
-                                {{ form.cont|safe }}
-                                <br>
-                                {{ form.file.label_tag }}
-                                {{ form.file }}
-                                <br>
-                                {{ form.img.label_tag }}
-                                {{ form.img }}
+                                {{ form.as_p }}
                                 <br>
                                 <button type="submit" class="btn btn-primary">Kontextus hozzáadása</button>
                             </form>

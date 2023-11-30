@@ -1,3 +1,4 @@
+import PyPDF2
 import markdown
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -5,7 +6,9 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login, authenticate
 from django.views.decorators.csrf import csrf_exempt
-from .models import Worker, superContext, Role
+from docx import Document
+
+from .models import Worker, superContext, Role, upContext
 from .forms import SignUpForm, LoginForm, SetupForm, UploadContextForm, PermissionForm, AddPositionForm
 
 
@@ -85,17 +88,42 @@ def context(request):
     contxt = get_object_or_404(superContext, pk=1)
     if request.method == 'POST':
         form = UploadContextForm(request.POST, request.FILES or None)
-        tstr = request.POST.get('cont', '')
-        print(type(tstr))
-        tstr = tstr.replace('\r\n', '\n')
-        print(tstr)
-        contxt.context = tstr
-        contxt.context= markdown.markdown(contxt.context)
-        contxt.save()
-        if request.POST['img']:
-            contxt.img = request.POST['img']
-
-        return redirect('context')
+        print(form)
+        if form.is_valid():
+            tstr = ""
+            if request.FILES.get('file', False):
+                print(request.FILES)
+                upfile = request.FILES['file']
+                print(upfile)
+                if upContext.objects.exists():
+                    for pk in upContext.objects.all():
+                        pk.delete()
+                upfiles = upContext.objects.create(uploaded_files=upfile)
+                print(upfiles.uploaded_files)
+                upfiles.save()
+                if upfiles.uploaded_files.name.endswith('.docx'):
+                    doc = Document(upfiles.uploaded_files.name)
+                    t = []
+                    for para in doc.paragraphs:
+                        t.append(para.text)
+                    tstr = '\n'.join(t)
+                elif upfiles.uploaded_files.name.endswith('.pdf'):
+                    with open(upfiles.uploaded_files.name, 'rb') as f:
+                        pdf_reader = PyPDF2.PdfReader(f)
+                        t = ''
+                        i = 0
+                        for page_num in pdf_reader.pages:
+                            page = pdf_reader.pages[i]
+                            tstr += page.extract_text()
+                            i+=1
+                elif upfiles.uploaded_files.name.endswith('.txt'):
+                    with open(upfiles.uploaded_files.name, 'r', encoding='utf-8') as f:
+                        tstr = f.read()
+            tstr += '\n' + request.POST['cont']
+            print(type(tstr))
+            print(tstr)
+            contxt.context = markdown.markdown(tstr)
+            contxt.save()
+            return redirect('context')
     form = UploadContextForm()
     return render(request, 'context.html', {'form': form, 'context': contxt.context})
-
