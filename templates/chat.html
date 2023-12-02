@@ -59,19 +59,6 @@
         </div>
     </div>
 <script>
-        function simulateTyping({{ message.answer }}) {
-            console.log({{ message.answer}});
-            const typingIndicator = document.getElementById('editor');
-            typingIndicator.innerHTML = '';
-
-            let index = 0;
-            const typingInterval = setInterval(() => {
-                typingIndicator.innerHTML += {{message.answer}}[index];
-                index++;
-
-
-            }, 50); // Adjust the interval as needed
-        }
     </script>
 
 {% endblock %}

@@ -8,6 +8,7 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.views.decorators.csrf import csrf_exempt
 from docx import Document
 
+from doc_handling import docx, handle
 from .models import Worker, superContext, Role, upContext
 from .forms import SignUpForm, LoginForm, SetupForm, UploadContextForm, PermissionForm, AddPositionForm
 
@@ -101,27 +102,8 @@ def context(request):
                 upfiles = upContext.objects.create(uploaded_files=upfile)
                 print(upfiles.uploaded_files)
                 upfiles.save()
-                if upfiles.uploaded_files.name.endswith('.docx'):
-                    doc = Document(upfiles.uploaded_files.name)
-                    t = []
-                    for para in doc.paragraphs:
-                        t.append(para.text)
-                    tstr = '\n'.join(t)
-                elif upfiles.uploaded_files.name.endswith('.pdf'):
-                    with open(upfiles.uploaded_files.name, 'rb') as f:
-                        pdf_reader = PyPDF2.PdfReader(f)
-                        t = ''
-                        i = 0
-                        for page_num in pdf_reader.pages:
-                            page = pdf_reader.pages[i]
-                            tstr += page.extract_text()
-                            i+=1
-                elif upfiles.uploaded_files.name.endswith('.txt'):
-                    with open(upfiles.uploaded_files.name, 'r', encoding='utf-8') as f:
-                        tstr = f.read()
+                tstr = handle(upfiles.uploaded_files.name)
             tstr += '\n' + request.POST['cont']
-            print(type(tstr))
-            print(tstr)
             contxt.context = markdown.markdown(tstr)
             contxt.save()
             return redirect('context')

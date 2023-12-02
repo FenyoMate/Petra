@@ -22,6 +22,7 @@ def process(msg, context):
         max_tokens=4000,
         temperature=0.5
     )
+    print(response)
     return response.choices[0].message.content
 
 
