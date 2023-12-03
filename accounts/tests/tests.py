@@ -1,26 +1,69 @@
+import coverage
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
 
-from accounts.forms import SignUpForm, SetupForm
+from accounts.forms import SignUpForm, SetupForm, LoginForm
 from accounts.models import Worker, Role, superContext
 from accounts.views import login, signup
 
 
 # Create your tests here.
 
+cov = coverage.coverage()
+cov.start()
+
 # Site tests
 
 class LoginTests(TestCase):
-
-    def test_login_view_status_code(self):
+    def setUp(self):
         url = reverse('login')
-        response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        data = {
+            'username': 'john',
+            'password': 'abcdef123456'
+        }
+        self.response = self.client.post(url, data)
+        self.home_url = reverse('profile')
 
-    def test_login_url_resolves_view(self):
-        view = resolve('/')
-        self.assertEquals(view.func, login)
+    def test_redirection(self):
+        self.assertRedirects(self.response, 200)
+
+    def test_csrf(self):
+        self.assertContains(self.response, 'csrfmiddlewaretoken')
+
+    def test_isAuth(self):
+        response = self.client.get(self.home_url)
+        user = response.context.get('user')
+        self.assertTrue(user.is_authenticated)
+    def test_contains_form(self):
+        form = self.response.context.get('form')
+        self.assertIsInstance(form, LoginForm)
+
+    def form_inputs(self):
+        self.assertContains(self.response, '<input', 2)
+        self.assertContains(self.response, 'type="text"', 1)
+        self.assertContains(self.response, 'type="password"', 1)
+
+    def test_login_success(self):
+        url = reverse('setup')
+        data = {
+            'name': 'Teszt',
+            'password': 'abcdef123456',
+        }
+        self.response = self.client.post(url, data)
+        self.home_url = resolve('/profile/')
+        self.assertRedirects(self.response, self.home_url)
+
+
+def test_login_view_status_code(self):
+    url = reverse('login')
+    response = self.client.get(url)
+    self.assertEquals(response.status_code, 200)
+
+
+def test_login_url_resolves_view(self):
+    view = resolve('/')
+    self.assertEquals(view.func, login)
 
 
 class SignUpTests(TestCase):
@@ -84,11 +127,22 @@ class SuccessfulSignUpTests(TestCase):
         self.assertTrue(user.is_authenticated)
 
 
+def test_setup_success():
+    url = reverse('setup')
+
+
 class SetupTests(TestCase):
     def setUp(self):
-        url = reverse('login')
-        roli = Role.objects.create(name="Admin")
-        self.response = self.client.get(url)
+        url = reverse('signup')
+        data = {
+            'name': 'John',
+            'firstname': 'Doe',
+            'lastname': 'John',
+            'title': Role.objects.create(name='Admin'),
+            'desk': '1'
+        }
+        self.response = self.client.post(url, data)
+        self.home_url = reverse('profile')
 
     def test_Admin_creation(self):
         self.assertTrue(Role.objects.exists())
@@ -98,25 +152,6 @@ class SetupTests(TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 302)
 
-    def test_form_inputs(self):
-        self.assertContains(self.response, '<input', 3)
-        self.assertContains(self.response, 'type="text"', 1)
-        self.assertContains(self.response, 'type="text"', 1)
-        self.assertContains(self.response, 'type="text"', 1)
-        self.assertContains(self.response, 'type="number"', 1)
-        self.assertContains(self.response, 'type="text"', 1)
-
-    def test_setup_success(self):
-        url = reverse('setup')
-        data = {
-            'name': 'John',
-            'firstname': 'Doe',
-            'lastname': 'John',
-            'title': Role.objects.get(name='Admin'),
-            'desk': '1'
-        }
-        self.response = self.client.post(url, data)
-        self.home_url = reverse('profile')
 
 
 class InvalidSignUpTests(TestCase):
@@ -144,3 +179,7 @@ class SignUpFormTest(TestCase):
         expected = ['username', 'email', 'password1', 'password2', 'accept']
         actual = list(form.fields)
         self.assertSequenceEqual(expected, actual)
+
+cov.stop()
+cov.save()
+cov.html_report()

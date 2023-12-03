@@ -55,7 +55,7 @@ def chat(request, pk):
         ct = ""
         for message in messages:
             ct += message.message + "\n" + message.answer + "\n"
-        response = process(request.POST['chat_input'], tchat.context + ct)
+        response = process(request.POST['chat_input'], tchat.context + ct,pk)
         konvRes = markdown.markdown(response)
         ChatMessage.objects.create(
             chat=tchat,

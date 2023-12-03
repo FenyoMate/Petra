@@ -19,6 +19,8 @@ def pdf(filename):
             page = pdf_reader.pages[i]
             t += page.extract_text()
             i += 1
+    return t
+
 
 
 def txt(filename):
@@ -31,6 +33,7 @@ def handle(filename):
     if filename.endswith('.docx'):
         return docx(filename)
     elif filename.endswith('.pdf'):
+        print("pdf")
         return pdf(filename)
     elif filename.endswith('.txt'):
         return txt(filename)

@@ -1,5 +1,6 @@
 import PyPDF2
 import markdown
+import tiktoken
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -34,6 +35,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
+
             return redirect('setup')
     else:
         form = SignUpForm()
@@ -89,22 +91,23 @@ def context(request):
     contxt = get_object_or_404(superContext, pk=1)
     if request.method == 'POST':
         form = UploadContextForm(request.POST, request.FILES or None)
-        print(form)
         if form.is_valid():
-            tstr = ""
+            tstr = ''
             if request.FILES.get('file', False):
-                print(request.FILES)
                 upfile = request.FILES['file']
-                print(upfile)
                 if upContext.objects.exists():
                     for pk in upContext.objects.all():
                         pk.delete()
                 upfiles = upContext.objects.create(uploaded_files=upfile)
-                print(upfiles.uploaded_files)
                 upfiles.save()
                 tstr = handle(upfiles.uploaded_files.name)
             tstr += '\n' + request.POST['cont']
-            contxt.context = markdown.markdown(tstr)
+            contxt.context = tstr
+            enc = tiktoken.get_encoding("cl100k_base")
+            contxt.value = len(enc.encode(contxt.context))
+            if contxt.value > 50000:
+               form.errors['cont'] = "A kontextus túl hosszú!"
+               return render(request, 'context.html', {'form': form, 'context': contxt.context})
             contxt.save()
             return redirect('context')
     form = UploadContextForm()

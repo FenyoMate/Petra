@@ -1,10 +1,10 @@
+import tiktoken
 from django.contrib.auth.models import User
 from django.db import models
 
 
 class Role(models.Model):
     name = models.CharField(max_length=100)
-
 
 
 class Worker(models.Model):
@@ -18,10 +18,8 @@ class Worker(models.Model):
 
 class superContext(models.Model):
     context = models.CharField(max_length=90000)
+    value = models.IntegerField(default=0)
 
-    def __init__(self):
-        self.context = ''
-        super().__init__(self)
 
 
 class upContext(models.Model):

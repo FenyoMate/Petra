@@ -22,11 +22,14 @@ class ProfileSetupTests(TestCase):
 
 
 class context_tests(TestCase):
+    def setUp(self):
+        url = reverse('context')
+        auth = {
+
+        }
     def test_context_view_status_code(self):
         url = resolve('/context/')
-        print(url)
         response = self.client.get(url)
-        print(response)
         self.assertEquals(response.status_code, 302)
 
     def test_url_resolves_view(self):
